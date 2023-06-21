@@ -16,6 +16,16 @@ export class UsersService {
     this.userRepo = new UserRepository(db);
   }
 
+  async getUserByUsername(username: string): Promise<any> {
+    try {
+      const data = await this.userRepo.findByName(this.db, username);
+      console.log('xxxxxx', username, data);
+      return data;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   async getAllUser(): Promise<any> {
     try {
       const users = await this.userRepo.findAll(this.db);
@@ -38,16 +48,6 @@ export class UsersService {
   async getUserById(id_user: string): Promise<any> {
     try {
       const data = await this.userRepo.findById(this.db, id_user);
-      console.log('xxxxxx', data);
-      return data;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  async getUserByUsername(name_user: string): Promise<any> {
-    try {
-      const data = await this.userRepo.findByName(this.db, name_user);
       console.log('xxxxxx', data);
       return data;
     } catch (error) {
