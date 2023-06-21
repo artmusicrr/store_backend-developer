@@ -2,64 +2,62 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
 import { DataRequest } from '../interfaces/request.interface';
 import { Client } from 'pg';
-import { User } from './entities/user.entity';
+import { UserRepository } from './entities/users.entity';
 
 @Injectable()
 export class UsersService {
   request: any;
   userEntity: any;
+  userRepo: UserRepository;
   constructor(
     @Inject(DatabaseModule.PG_POOL)
     private readonly db: Client,
-  ) {}
+  ) {
+    this.userRepo = new UserRepository(db);
+  }
 
   async getAllUser(): Promise<any> {
-    console.log('xxxxxx');
     try {
-      const user = new User();
-      const resp = await user.findAll(this.db);
-      return resp;
+      const users = await this.userRepo.findAll(this.db);
+      return users;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async createUserInService(request: DataRequest): Promise<any> {
-    console.log('<==>', request.body);
+  async createUser(request: DataRequest): Promise<any> {
+    const data = await this.userRepo.createUser(request);
     try {
-      const res = await new User().createUserInService(this.db, request);
-      return res;
+      console.log('xxxxxx', data);
+      return data;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async findById(id_user: string): Promise<any> {
+  async getUserById(id_user: string): Promise<any> {
     try {
-      const user = new User();
-      const resp = await user.findById(this.db, id_user);
-      console.log('xxxxxx', resp);
-      return resp;
+      const data = await this.userRepo.findById(this.db, id_user);
+      console.log('xxxxxx', data);
+      return data;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async findByName(name_user: string): Promise<any> {
+  async getUserByUsername(name_user: string): Promise<any> {
     try {
-      const user = new User();
-      const resp = await user.findByName(this.db, name_user);
-      console.log('xxxxxx', resp);
-      return resp;
+      const data = await this.userRepo.findByName(this.db, name_user);
+      console.log('xxxxxx', data);
+      return data;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async updateById(request: DataRequest): Promise<any> {
+  async updateUser(request: DataRequest): Promise<any> {
     try {
-      const user = new User();
-      const data = await user.updateById(this.db, request);
+      const data = await this.userRepo.updateById(this.db, request);
       console.log('xxxxxx', data);
       return data;
     } catch (error) {
@@ -69,10 +67,9 @@ export class UsersService {
 
   async deleteUser(id_user: string): Promise<any> {
     try {
-      const user = new User();
-      const deleteUser = await user.deleteUser(this.db, id_user);
-      console.log('xxxxxx', deleteUser);
-      return deleteUser;
+      const data = await this.userRepo.deleteUser(this.db, id_user);
+      console.log('xxxxxx', data);
+      return data;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

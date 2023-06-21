@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
-import { User } from './users/entities/user.entity';
+import { UserRepository } from './users/entities/users.entity';
 import { ProductsModule } from './products/products.module';
 import { Products } from './products/entities/product.entity';
 import { AdministratorsModule } from './administrators/administrators.module';
@@ -21,6 +21,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ], // Import the DatabaseModule here
   controllers: [AppController],
-  providers: [AppService, User, Products, Administrators],
+  providers: [AppService, UserRepository, Products, Administrators],
 })
 export class AppModule {}

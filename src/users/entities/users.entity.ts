@@ -2,23 +2,36 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { Client } from 'pg';
 import { DataRequest } from '../../interfaces/request.interface';
 
-export class User {
-  request: DataRequest;
-  db: any;
+export class UserRepository {
+  db: Client;
+  constructor(db: Client) {
+    this.db = db;
+  }
 
-  async createUserInService(db: Client, request: DataRequest): Promise<void> {
+  async createUser(request: DataRequest): Promise<void> {
     try {
+      if (
+        !request.username ||
+        !request.email_user ||
+        !request.cpf_user ||
+        !request.password
+      ) {
+        throw new HttpException(
+          'Campos obrigatórios não fornecidos',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       //const id_user = uuidv4();
       const query = `
-        INSERT INTO public.users (name_user, email_user, cpf_user, password_user, registration_date, active)
+        INSERT INTO public.users (username, email_user, cpf_user, password, registration_date, active)
         VALUES ($1, $2, $3, $4, NOW(), true);`;
       const values = [
-        request.name_user,
+        request.username,
         request.email_user,
         request.cpf_user,
-        request.password_user,
+        request.password,
       ];
-      await db.query(query, values);
+      await this.db.query(query, values);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -27,7 +40,7 @@ export class User {
   async findAll(db: Client): Promise<any> {
     try {
       const query = `
-       SELECT id_user, name_user, email_user, cpf_user, password_user, registration_date, active
+       SELECT id_user, username, email_user, cpf_user, password, registration_date, active
 	     FROM public.users;`;
       const dataAccess = await db.query(query);
       const res = dataAccess.rows;
@@ -52,10 +65,10 @@ export class User {
     }
   }
 
-  async findByName(db: Client, name_user: string): Promise<any> {
+  async findByName(db: Client, username: string): Promise<any> {
     try {
       const query = `
-      SELECT * FROM public.users where name_user = '${name_user}';`;
+      SELECT * FROM public.users where username = '${username}';`;
       //const values = [name_user];
       const result = await db.query(query);
       console.log('======', result);
@@ -69,16 +82,17 @@ export class User {
     try {
       const query = `
       UPDATE public.users
-      SET name_user = $1, email_user = $2, cpf_user = $3, password_user = $4
+      SET username = $1, email_user = $2, cpf_user = $3, password = $4
       WHERE id_user = $5
-      RETURNING id_user, name_user, email_user, cpf_user, password_user, registration_date, active;`;
+      RETURNING id_user, username, email_user, cpf_user, password, registration_date, active;`;
       const values = [
-        request.name_user,
+        request.username,
         request.email_user,
         request.cpf_user,
-        request.password_user,
+        request.password,
         request.id_user,
       ];
+      console.log('xxxxxx', query);
       const dataAccess = await db.query(query, values);
       const res = dataAccess.rows[0];
       console.log('===xx===', res);
@@ -106,7 +120,7 @@ export class User {
 
       return {
         message: `Usuário $1 deletado com sucesso`,
-        user: userToDelete.name_user,
+        user: userToDelete.username,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
