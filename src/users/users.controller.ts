@@ -13,7 +13,6 @@ import {
 import { DataRequest } from 'src/interfaces/request.interface';
 import { UsersService } from './users.service';
 import { JwtAuthdGuard } from 'src/auth/auth-guard/jwt-auth.guard';
-import * as bcrypt from 'bcrypt';
 
 @Controller('users')
 export class UsersController {
