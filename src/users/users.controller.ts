@@ -8,14 +8,18 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { DataRequest } from 'src/interfaces/request.interface';
 import { UsersService } from './users.service';
+import { JwtAuthdGuard } from 'src/auth/auth-guard/jwt-auth.guard';
+import * as bcrypt from 'bcrypt';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(JwtAuthdGuard)
   @Get()
   async findAll() {
     try {
@@ -26,6 +30,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JwtAuthdGuard)
   @Post('/create-user')
   async createUser(@Body() request: DataRequest): Promise<any> {
     try {
@@ -40,6 +45,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JwtAuthdGuard)
   @Get(':id')
   async findById(@Param('id') id_user: string): Promise<any> {
     try {
@@ -53,6 +59,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JwtAuthdGuard)
   @Get('username/:username')
   async findByName(@Param('username') username: string): Promise<any> {
     try {
@@ -66,6 +73,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JwtAuthdGuard)
   @Patch(':id')
   async updateById(
     @Param('id') id_user: string,
@@ -83,6 +91,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JwtAuthdGuard)
   @Delete(':id')
   async deleteUser(@Param('id') id_user: string): Promise<any> {
     try {
