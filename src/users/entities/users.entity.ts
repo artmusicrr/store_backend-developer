@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Client } from 'pg';
 import { DataRequest } from '../../interfaces/request.interface';
+import * as bcrypt from 'bcrypt';
 
 export class UserRepository {
   db: Client;
@@ -29,7 +30,7 @@ export class UserRepository {
         request.username,
         request.email_user,
         request.cpf_user,
-        request.password,
+        (request.password = bcrypt.hashSync(request.password, 8)),
       ];
       await this.db.query(query, values);
     } catch (error) {
@@ -44,7 +45,6 @@ export class UserRepository {
 	     FROM public.users;`;
       const dataAccess = await db.query(query);
       const res = dataAccess.rows;
-      console.log('======', res);
       return res;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
