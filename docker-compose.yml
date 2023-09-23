@@ -35,7 +35,7 @@ services:
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: db_store
     ports:
-      - "4000:4000"
+      - "4001:4001"
     depends_on:
       - postgres
     networks:

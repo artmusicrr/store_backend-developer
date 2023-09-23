@@ -30,6 +30,7 @@ export class UserRepository {
         request.username,
         request.email_user,
         request.cpf_user,
+        //request.password,
         (request.password = bcrypt.hashSync(request.password, 8)),
       ];
       await this.db.query(query, values);
