@@ -29,7 +29,7 @@ export class UsersController {
     }
   }
 
-  @UseGuards(JwtAuthdGuard)
+  //@UseGuards(JwtAuthdGuard)
   @Post('/create-user')
   async createUser(@Body() request: DataRequest): Promise<any> {
     try {
