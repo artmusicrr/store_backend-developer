@@ -1,74 +1,148 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# store-backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[![Linguagem principal](https://img.shields.io/github/languages/top/artmusicrr/store_backend-developer)](https://github.com/artmusicrr/store_backend-developer)
+[![Tamanho do repositório](https://img.shields.io/github/repo-size/artmusicrr/store_backend-developer)](https://github.com/artmusicrr/store_backend-developer)
+[![Branch master](https://img.shields.io/badge/branch-master-blue)](https://github.com/artmusicrr/store_backend-developer/tree/master)
+[![License](https://img.shields.io/badge/license-UNLICENSED-lightgrey)](https://github.com/artmusicrr/store_backend-developer)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Descrição
+---------
+Backend em Node.js + NestJS escrito em TypeScript para uma aplicação de loja (store). Fornece APIs REST (e possivelmente endpoints protegidos por JWT) para autenticação, gerenciamento de usuários, produtos, pedidos, etc. Projetado para rodar localmente com Node.js e também com Docker/Docker Compose.
 
-## Description
+Principais tecnologias
+----------------------
+- Node.js / TypeScript
+- NestJS
+- PostgreSQL (pg)
+- Autenticação: JWT + Passport
+- Testes: Jest + Supertest
+- Docker / Docker Compose
+- ESLint / Prettier
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Requisitos
+----------
+- Node.js 18+ (recomendado)
+- npm 8+
+- Docker e Docker Compose (opcional, para execução em contêiner)
+- PostgreSQL (se rodar sem Docker)
 
-## Installation
+Instalação (modo desenvolvimento)
+--------------------------------
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/artmusicrr/store_backend-developer.git
+   cd store_backend_developer
+   ```
 
-```bash
-$ npm install
+2. Instale dependências:
+   ```bash
+   npm install
+   ```
+
+3. Copie e ajuste o arquivo de ambiente (.env):
+   ```bash
+   cp .env.example .env
+   # editar .env conforme necessário
+   ```
+
+Exemplo de arquivo .env
+-----------------------
+Abaixo um exemplo genérico. Ajuste de acordo com a implementação real (nomes de variáveis podem variar no código):
+
+```env
+# Ambiente
+NODE_ENV=development
+PORT=3000
+
+# Banco de dados Postgres
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+DATABASE_NAME=store_db
+
+# JWT
+JWT_SECRET=troque_esta_chave_por_uma_segura
+JWT_EXPIRES_IN=3600s
+
+# Outros (ex.: configuração do TypeORM/ORM que estiver usando)
+# TYPEORM_SYNCHRONIZE=true
+# TYPEORM_LOGGING=false
 ```
 
-## Running the app
+Observação: se houver um arquivo `.env` já no repositório, verifique-o e não versionar credenciais sensíveis. Crie um `.env.local` ou utilize variáveis de ambiente no ambiente de deploy.
+
+Scripts úteis (npm)
+-------------------
+- npm run start:dev — iniciar em modo desenvolvimento (watch)
+- npm run start — iniciar normalmente (NestJS)
+- npm run start:prod — iniciar build em produção (executa dist/main)
+- npm run build — compilar TypeScript (nest build)
+- npm run lint — rodar e corrigir ESLint
+- npm run format — formatar com Prettier
+- npm test — executar testes unitários
+- npm run test:e2e — executar testes end-to-end
+- npm run test:cov — cobertura de testes
+
+Executando com Docker (exemplo)
+------------------------------
+Se o projeto já inclui `Dockerfile` e `docker-compose.yml`, pode iniciar com:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+docker-compose up --build
 ```
 
-## Test
+Isso deve subir o serviço do backend e possivelmente um container do PostgreSQL (depende do docker-compose.yml presente). Ajuste variáveis de ambiente no `docker-compose.yml` ou em um arquivo `.env` referenciado.
 
-```bash
-# unit tests
-$ npm run test
+Estrutura típica do projeto
+---------------------------
+- src/                - código fonte em TypeScript (controllers, modules, services, entities, etc.)
+- test/               - testes e2e (Jest)
+- Dockerfile
+- docker-compose.yml
+- package.json
+- tsconfig.json
+- .eslintrc.js, .prettierrc
+- assets/             - imagens/ativos estáticos (se aplicável)
 
-# e2e tests
-$ npm run test:e2e
+Autenticação
+------------
+Dependências indicam uso de Passport com JWT e estratégia local:
+- login/registro com `passport-local` e proteção de rotas com `passport-jwt`.
+- JWT é gerado com `@nestjs/jwt` / jsonwebtoken.
+- Senhas protegidas com `bcrypt`.
 
-# test coverage
-$ npm run test:cov
-```
+Observação: verifique a configuração em `src` (módulo de auth) para confirmar nomes exatos das variáveis de ambiente exigidas e rotas expostas.
 
-## Support
+Testes
+------
+- Unitários e integração via Jest.
+- End-to-end via `npm run test:e2e`.
+- Cobertura: `npm run test:cov`.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Boas práticas e recomendações
+----------------------------
+- Não versionar arquivos `.env` com segredos.
+- Trocar `JWT_SECRET` para um valor forte em produção.
+- Se quiser tornar o repositório público/open-source, defina uma licença (ex.: MIT).
+- Adicionar workflow CI (GitHub Actions) para rodar lint, tests e build automaticamente.
+- Documentar os endpoints principais (ex.: via OpenAPI/Swagger). O NestJS tem suporte a Swagger — recomendo adicionar se ainda não há.
 
-## Stay in touch
+Como contribuir
+---------------
+1. Fork do repositório.
+2. Crie uma branch com um nome descritivo: `feature/minha-melhora` ou `fix/bug-x`.
+3. Faça commits pequenos e atômicos.
+4. Execute testes localmente antes de abrir PR.
+5. Abra um Pull Request descrevendo as mudanças e testes realizados.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Licença
+-------
+O package.json indica `UNLICENSED`. Isso significa que o projeto está marcado como privado/não licenciado. Se desejar permitir contribuições externas, escolha e aplique uma licença (ex.: MIT).
 
-## License
+Contato
+-------
+Para dúvidas ou se precisar que eu gere o README.md no repositório (PR/commit), me diga como prefere: substituir o README atual ou criar uma versão aprimorada em outra branch.
 
-Nest is [MIT licensed](LICENSE).
-# store_backend-developer
+---
+Observação final: este README foi gerado com base nas informações encontradas no repositório (package.json e arquivos de configuração). Para documentar endpoints, variáveis de ambiente exatas e exemplos de uso de API, analisei os arquivos em src/ e posso complementar o README com rotas e exemplos específicos se desejar.
